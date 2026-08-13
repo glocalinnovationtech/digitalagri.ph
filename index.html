@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Agriculture of the Philippines OPC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root{
+    --gold:#C99A3D;
+    --mud:#1F3327;
+    --paddy:#4C6B47;
+    --cream:#EAF3E1;
+    --irrigation:#2E5266;
+    --husk:#CFE3C2;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--cream); color:var(--mud); font-family:'Inter',sans-serif;}
+  .font-display{font-family:'Fraunces',serif;}
+  .font-mono{font-family:'IBM Plex Mono',monospace;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+  }
+  .contour path{fill:none; stroke:var(--gold); stroke-width:1.4; opacity:0.55;}
+  .contour path:nth-child(2){stroke:var(--paddy); opacity:0.45;}
+  .contour path:nth-child(3){stroke:var(--irrigation); opacity:0.4;}
+  .fade-in{opacity:0; transform:translateY(14px); animation:fadeUp 0.7s ease forwards;}
+  @keyframes fadeUp{to{opacity:1; transform:translateY(0);}}
+  .pillar-card{transition:border-color 0.25s ease, transform 0.25s ease;}
+  .pillar-card:hover{transform:translateY(-3px);}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--irrigation); outline-offset:3px;}
+
+  /* Responsive green/pastel-green UI enhancements */
+  :root{
+    --green-50:#F3FAEE;
+    --green-100:#E4F2DA;
+    --green-200:#CFE6C3;
+    --green-300:#B4D6A5;
+    --green-500:#5E8F58;
+    --green-700:#315B3A;
+    --green-900:#183522;
+  }
+  body{overflow-x:hidden;}
+  .language-switcher{
+    position:fixed; top:5.25rem; left:.75rem; z-index:70;
+    width:170px; max-width:calc(100vw - 1.5rem);
+    background:rgba(243,250,238,.94); border:1px solid rgba(49,91,58,.18);
+    border-radius:16px; box-shadow:0 10px 30px rgba(24,53,34,.12);
+    backdrop-filter:blur(12px); overflow:hidden;
+  }
+  .language-toggle{
+    width:100%; display:flex; align-items:center; justify-content:space-between;
+    gap:.5rem; padding:.65rem .8rem; border:0; background:transparent;
+    color:var(--green-900); font:600 .78rem Inter,sans-serif; cursor:pointer;
+  }
+  .language-options{
+    max-height:0; overflow-y:auto; transition:max-height .25s ease;
+    scrollbar-width:thin; scrollbar-color:var(--green-300) transparent;
+  }
+  .language-switcher.open .language-options{max-height:230px;}
+  .language-options button{
+    width:100%; padding:.65rem .8rem; text-align:left; border:0;
+    background:transparent; color:var(--green-900); cursor:pointer; font-size:.78rem;
+  }
+  .language-options button:hover,.language-options button.active{background:var(--green-100);}
+  .mobile-menu{
+    display:none; border:1px solid rgba(31,51,39,.15); border-radius:999px;
+    padding:.55rem .7rem; background:rgba(243,250,238,.7); color:var(--green-900);
+  }
+  .mobile-nav{
+    display:none; position:absolute; top:calc(100% + .5rem); left:.75rem; right:.75rem;
+    background:rgba(243,250,238,.98); border:1px solid rgba(31,51,39,.12);
+    border-radius:18px; padding:.65rem; box-shadow:0 14px 35px rgba(24,53,34,.14);
+  }
+  .mobile-nav.open{display:flex; flex-direction:column;}
+  .mobile-nav a{padding:.7rem .8rem; border-radius:10px;}
+  .ai-agent{
+    position:fixed; right:18px; bottom:18px; z-index:80;
+    width:58px; height:58px; border:0; border-radius:50%;
+    background:var(--green-700); color:white; cursor:pointer;
+    box-shadow:0 10px 25px rgba(24,53,34,.28);
+    display:grid; place-items:center; transition:transform .2s ease, background .2s ease;
+  }
+  .ai-agent:hover{transform:translateY(-3px); background:var(--green-500);}
+  .ai-agent svg{width:27px;height:27px;}
+  .chat-panel{
+    position:fixed; right:18px; bottom:88px; z-index:79; width:min(360px,calc(100vw - 24px));
+    background:#fff; border:1px solid rgba(49,91,58,.18); border-radius:20px;
+    box-shadow:0 18px 50px rgba(24,53,34,.2); overflow:hidden;
+    display:none;
+  }
+  .chat-panel.open{display:block;}
+  .chat-head{background:var(--green-700);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;}
+  .chat-body{height:260px;overflow-y:auto;padding:14px;background:var(--green-50);}
+  .chat-msg{max-width:85%;padding:9px 11px;border-radius:12px;margin-bottom:9px;font-size:13px;line-height:1.45;}
+  .bot-msg{background:#fff;border:1px solid rgba(49,91,58,.12);}
+  .user-msg{background:var(--green-200);margin-left:auto;}
+  .chat-form{display:flex;gap:7px;padding:10px;border-top:1px solid #ddd;background:#fff;}
+  .chat-form input{min-width:0;flex:1;border:1px solid #c9d9c3;border-radius:10px;padding:9px 10px;outline:none;}
+  .chat-form button{border:0;border-radius:10px;background:var(--green-700);color:#fff;padding:0 13px;cursor:pointer;}
+  @media (max-width:767px){
+    header .max-w-6xl{height:60px;}
+    header nav{display:none !important;}
+    .mobile-menu{display:block;}
+    .language-switcher{top:4.35rem;left:.55rem;width:150px;}
+    .language-switcher.open .language-options{max-height:190px;}
+    section{scroll-margin-top:70px;}
+    .ai-agent{right:14px;bottom:14px;width:54px;height:54px;}
+    .chat-panel{right:12px;bottom:78px;}
+    h1{font-size:clamp(3rem,16vw,5rem) !important;}
+  }
+  @media (min-width:768px){
+    section{scroll-margin-top:80px;}
+  }
+
+</style>
+
+<style>
+/* Language selector: top of page only — NOT sticky/fixed while scrolling */
+#languageSelector,
+.language-selector,
+.language-switcher,
+[data-language-selector] {
+  position: absolute !important;
+  top: 0.75rem !important;
+  left: 0.75rem !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 50 !important;
+}
+
+/* Keep the top language control usable on smaller screens */
+@media (max-width: 640px) {
+  #languageSelector,
+  .language-selector,
+  .language-switcher,
+  [data-language-selector] {
+    top: 0.5rem !important;
+    left: 0.5rem !important;
+    max-width: calc(100vw - 1rem);
+  }
+}
+</style>
+
+
+<style id="dapo-fixed-language-style">
+/* Fixed language selector: always visible at the top-left while scrolling */
+#dapoLanguageSelector {
+  position: fixed !important;
+  top: 0.75rem !important;
+  left: 0.75rem !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 10000 !important;
+}
+
+@media (max-width: 640px) {
+  #dapoLanguageSelector {
+    top: 0.5rem !important;
+    left: 0.5rem !important;
+  }
+}
+</style>
+
+</head>
+<body class="antialiased">
+
+<div id="dapoLanguageSelector" aria-label="Language selector">
+  <button id="dapoLanguageToggle" type="button" aria-expanded="false">
+    <span>🌐</span>
+    <span id="currentLanguage">English</span>
+    <span aria-hidden="true">⌄</span>
+  </button>
+  <div id="dapoLanguageMenu" role="menu">
+    <button type="button" data-lang="English">English</button>
+    <button type="button" data-lang="Tagalog">Tagalog</button>
+    <button type="button" data-lang="Ilokano">Ilokano</button>
+    <button type="button" data-lang="Kapampangan">Kapampangan</button>
+    <button type="button" data-lang="Bisaya">Bisaya</button>
+    <button type="button" data-lang="Iloilo">Ilonggo</button>
+    <button type="button" data-lang="Batangas">Batangueno</button>
+  </div>
+</div>
+<style>
+  #dapoLanguageSelector {
+    position:absolute;
+    top:0.75rem;
+    left:0.75rem;
+    z-index:100;
+    font-family:Inter, sans-serif;
+  }
+  #dapoLanguageToggle {
+    display:flex;
+    align-items:center;
+    gap:.45rem;
+    border:1px solid rgba(31,51,39,.2);
+    background:rgba(234,243,225,.96);
+    color:#1F3327;
+    border-radius:999px;
+    padding:.55rem .8rem;
+    font-size:.82rem;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 3px 12px rgba(31,51,39,.10);
+  }
+  #dapoLanguageMenu {
+    display:none;
+    margin-top:.4rem;
+    width:175px;
+    max-height:190px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    border:1px solid rgba(31,51,39,.15);
+    background:#EAF3E1;
+    border-radius:12px;
+    padding:.3rem;
+    box-shadow:0 8px 24px rgba(31,51,39,.16);
+  }
+  #dapoLanguageMenu.open { display:block; }
+  #dapoLanguageMenu button {
+    width:100%;
+    text-align:left;
+    border:0;
+    background:transparent;
+    color:#1F3327;
+    padding:.55rem .65rem;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:.8rem;
+  }
+  #dapoLanguageMenu button:hover,
+  #dapoLanguageMenu button.active {
+    background:#CFE3C2;
+  }
+  #dapoLanguageMenu::-webkit-scrollbar { width:6px; }
+  #dapoLanguageMenu::-webkit-scrollbar-thumb {
+    background:#4C6B47;
+    border-radius:999px;
+  }
+  @media (max-width:640px) {
+    #dapoLanguageSelector { top:.5rem; left:.5rem; }
+    #dapoLanguageToggle { font-size:.76rem; padding:.48rem .68rem; }
+    #dapoLanguageMenu { width:155px; max-height:170px; }
+  }
+</style>
+
+
+<!-- Language selector: upper-left, scrollable on small screens -->
+<div class="language-switcher" id="languageSwitcher">
+  <button class="language-toggle" id="languageToggle" type="button" aria-expanded="false">
+    <span>🌐 <span id="currentLanguage">English</span></span><span>⌄</span>
+  </button>
+  <div class="language-options" id="languageOptions" role="listbox" aria-label="Language options">
+    <button type="button" data-lang="Ilokano">Ilokano</button>
+    <button type="button" data-lang="English" class="active">English</button>
+    <button type="button" data-lang="Tagalog">Tagalog</button>
+    <button type="button" data-lang="Kapampangan">Kapampangan</button>
+    <button type="button" data-lang="Batangas">Batangas</button>
+    <button type="button" data-lang="Bisaya">Bisaya</button>
+    <button type="button" data-lang="Iloilo">Iloilo</button>
+  </div>
+</div>
+
+
+<header class="fixed top-0 left-0 right-0 z-50 border-b border-[#1F3327]/10 bg-[#EAF3E1]/90 backdrop-blur">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 md:px-10 h-16 flex items-center justify-between relative">
+    <div class="flex items-center gap-2">
+      <span class="font-display text-lg tracking-tight">Digital&nbsp;Agriculture</span>
+      <span class="font-mono text-[11px] text-[#1F3327]/50 hidden sm:inline">PH · OPC</span>
+    </div>
+    <nav class="hidden md:flex items-center gap-5 lg:gap-8 text-sm">
+      <a href="#work" class="hover:text-[#4C6B47] transition-colors">What we do</a>
+      <a href="#crops" class="hover:text-[#4C6B47] transition-colors">Focus areas</a>
+      <a href="#livestock" class="hover:text-[#4C6B47] transition-colors">Livestock &amp; farmers</a>
+      <a href="#innovations" class="hover:text-[#4C6B47] transition-colors">Innovations</a>
+      <a href="#pitch" class="px-4 py-2 rounded-full bg-[#1F3327] text-[#EAF3E1] hover:bg-[#4C6B47] transition-colors">Pitch an idea</a>
+    </nav>
+    <button class="mobile-menu" id="mobileMenuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+    <nav class="mobile-nav" id="mobileNav">
+      <a href="#work">What we do</a>
+      <a href="#crops">Focus areas</a>
+      <a href="#livestock">Livestock &amp; farmers</a>
+      <a href="#innovations">Innovations</a>
+      <a href="#pitch">Pitch an idea</a>
+    </nav>
+  </div>
+</header>
+
+<section class="relative pt-36 pb-24 md:pt-44 md:pb-32 overflow-hidden">
+  <div class="absolute inset-0 contour pointer-events-none" aria-hidden="true">
+    <svg viewBox="0 0 1400 700" class="w-full h-full opacity-70" preserveAspectRatio="none">
+      <path d="M-50,560 C 200,540 340,600 520,560 S 900,480 1100,540 1250,580 1450,540" />
+      <path d="M-50,480 C 220,450 360,520 540,470 S 920,400 1120,460 1260,500 1450,460" />
+      <path d="M-50,400 C 240,380 380,430 560,390 S 940,330 1140,380 1270,410 1450,380" />
+      <path d="M-50,320 C 260,310 400,340 580,320 S 960,280 1160,310 1280,330 1450,310" />
+    </svg>
+  </div>
+  <div class="relative max-w-6xl mx-auto px-6 md:px-10">
+    <p class="fade-in font-mono text-xs uppercase tracking-[0.18em] text-[#4C6B47] mb-6" style="animation-delay:0.05s">Nueva Ecija · Isabela · Ilocos · Batangas · Marinduque</p>
+    <h1 class="fade-in font-display text-[13vw] leading-[0.95] md:text-7xl md:leading-[0.95] max-w-4xl" style="animation-delay:0.15s">
+      We read the land<br>so farmers don't<br>have to guess.
+    </h1>
+    <p class="fade-in mt-8 max-w-xl text-[17px] leading-relaxed text-[#1F3327]/80" style="animation-delay:0.3s">
+      Digital Agriculture of the Philippines turns soil readings, weather patterns, and market signals into decisions a farmer or cooperative can act on before the next planting season — not after the harvest is already lost.
+    </p>
+    <div class="fade-in mt-10 flex flex-wrap items-center gap-4" style="animation-delay:0.4s">
+      <a href="#contact" class="px-6 py-3 rounded-full bg-[#1F3327] text-[#EAF3E1] text-sm font-medium hover:bg-[#4C6B47] transition-colors">Partner with us</a>
+      <a href="#work" class="px-6 py-3 rounded-full border border-[#1F3327]/25 text-sm font-medium hover:border-[#1F3327]/60 transition-colors">See how it works</a>
+    </div>
+  </div>
+</section>
+
+<section class="border-y border-[#1F3327]/10 bg-[#DCEACB]">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-6 flex flex-wrap gap-x-10 gap-y-2 items-center justify-between text-sm text-[#1F3327]/70">
+    <p class="font-display italic text-base text-[#1F3327]">"Farming decisions used to wait for the barangay meeting. Ours wait for the data."</p>
+    <p class="font-mono text-xs shrink-0">One Person Corporation, registered PH</p>
+  </div>
+</section>
+
+<section id="work" class="max-w-6xl mx-auto px-6 md:px-10 py-24 md:py-32">
+  <div class="max-w-2xl mb-16">
+    <p class="font-mono text-xs uppercase tracking-[0.18em] text-[#4C6B47] mb-4">How we work</p>
+    <h2 class="font-display text-4xl md:text-5xl leading-tight">Three steps between raw field and a decision that pays off.</h2>
+  </div>
+  <div class="grid md:grid-cols-3 gap-6">
+    <div class="pillar-card border border-[#1F3327]/12 rounded-2xl p-8 bg-white/40">
+      <span class="font-mono text-xs text-[#C99A3D]">01 · Sense</span>
+      <h3 class="font-display text-2xl mt-3 mb-3">Ground truth</h3>
+      <p class="text-sm text-[#1F3327]/75 leading-relaxed">Low-cost soil, moisture, and weather sensors deployed field-by-field, plus satellite imagery for the plots we can't wire up yet. Every reading is timestamped and geotagged to the actual parcel.</p>
+    </div>
+    <div class="pillar-card border border-[#1F3327]/12 rounded-2xl p-8 bg-white/40">
+      <span class="font-mono text-xs text-[#4C6B47]">02 · Analyze</span>
+      <h3 class="font-display text-2xl mt-3 mb-3">Local models</h3>
+      <p class="text-sm text-[#1F3327]/75 leading-relaxed">Yield and pest-risk models trained on Philippine crop cycles, not imported defaults — a palay model that actually knows what a wet-season typhoon does to a Nueva Ecija paddy.</p>
+    </div>
+    <div class="pillar-card border border-[#1F3327]/12 rounded-2xl p-8 bg-white/40">
+      <span class="font-mono text-xs text-[#2E5266]">03 · Act</span>
+      <h3 class="font-display text-2xl mt-3 mb-3">In-hand advisory</h3>
+      <p class="text-sm text-[#1F3327]/75 leading-relaxed">SMS and app alerts in Filipino and regional dialects, routed through cooperative extension workers who already have the farmer's trust — the tech stays behind the person, not in front.</p>
+    </div>
+  </div>
+</section>
+
+<section id="impact" class="bg-[#1F3327] text-[#EAF3E1]">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-24 md:py-28">
+    <p class="font-mono text-xs uppercase tracking-[0.18em] text-[#C99A3D] mb-4">Where we've worked</p>
+    <h2 class="font-display text-3xl md:text-4xl max-w-xl mb-16">Early, focused, and still growing.</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-10">
+      <div>
+        <p class="font-mono text-4xl md:text-5xl text-[#C99A3D]">1,240</p>
+        <p class="text-sm text-[#EAF3E1]/65 mt-2">Farms with active field data</p>
+      </div>
+      <div>
+        <p class="font-mono text-4xl md:text-5xl text-[#C99A3D]">4</p>
+        <p class="text-sm text-[#EAF3E1]/65 mt-2">Provinces under coverage</p>
+      </div>
+      <div>
+        <p class="font-mono text-4xl md:text-5xl text-[#C99A3D]">18%</p>
+        <p class="text-sm text-[#EAF3E1]/65 mt-2">Avg. yield gain, pilot cohort</p>
+      </div>
+      <div>
+        <p class="font-mono text-4xl md:text-5xl text-[#C99A3D]">37</p>
+        <p class="text-sm text-[#EAF3E1]/65 mt-2">Cooperatives onboarded</p>
+      </div>
+    </div>
+    <p class="font-mono text-[11px] text-[#EAF3E1]/40 mt-10">Figures from pilot deployments, 2024–2026. Illustrative — request our latest impact report for verified data.</p>
+  </div>
+</section>
+
+<section id="crops" class="max-w-6xl mx-auto px-6 md:px-10 py-24 md:py-32">
+  <div class="max-w-2xl mb-16">
+    <p class="font-mono text-xs uppercase tracking-[0.18em] text-[#4C6B47] mb-4">Focus areas</p>
+    <h2 class="font-display text-4xl md:text-5xl leading-tight">Built around what's actually grown here.</h2>
+  </div>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+    <div class="rounded-2xl p-6 bg-[#CFE3C2]/50 border border-[#1F3327]/10">
+      <h3 class="font-display text-xl mb-2">Palay</h3>
+      <p class="text-sm text-[#1F3327]/70 leading-relaxed">Irrigation timing and pest-pressure alerts across wet and dry season plantings.</p>
+    </div>
+    <div class="rounded-2xl p-6 bg-[#CFE3C2]/50 border border-[#1F3327]/10">
+      <h3 class="font-display text-xl mb-2">Mango</h3>
+      <p class="text-sm text-[#1F3327]/70 leading-relaxed">Flower-induction and harvest-window forecasting for export-grade fruit.</p>
+    </div>
+    <div class="rounded-2xl p-6 bg-[#CFE3C2]/50 border border-[#1F3327]/10">
+      <h3 class="font-display text-xl mb-2">Coconut</h3>
+      <p class="text-sm text-[#1F3327]/70 leading-relaxed">Long-cycle yield tracking and intercropping recommendations for smallholders.</p>
+    </div>
+    <div class="rounded-2xl p-6 bg-[#CFE3C2]/50 border border-[#1F3327]/10">
+      <h3 class="font-display text-xl mb-2">Sugarcane</h3>
+      <p class="text-sm text-[#1F3327]/70 leading-relaxed">Soil nutrient mapping tied directly to milling schedules.</p>
+    </div>
+  </div>
+</section>
+
+<section id="livestock" class="bg-[#DCEACB]/60 border-y border-[#1F3327]/10">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-24 md:py-32">
+    <div class="max-w-2xl mb-16">
+      <p class="font-mono text-xs uppercase tracking-[0.18em] text-[#4C6B47] mb-4">Livestock &amp; farmers</p>
+      <h2 class="font-display text-4xl md:text-5xl leading-tight">The herd matters as much as the harvest.</h2>
+      <p class="mt-6 text-[#1F3327]/75 leading-relaxed">Crop data tells half the story for most smallholder households — the other half is walking around the backyard pen. We track livestock health and connect the farmers behind both.</p>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6 mb-14">
+      <div class="pillar-card border border-[#1F3327]/12 rounded-2xl p-8 bg-white/50">
+        <h3 class="font-display text-2xl mb-3">Swine &amp; poultry</h3>
+        <p class="text-sm text-[#1F3327]/75 leading-relaxed">Early disease-outbreak alerts for backyard and small commercial raisers, built after repeated ASF and avian flu losses across Luzon.</p>
+      </div>
+      <div class="pillar-card border border-[#1F3327]/12 rounded-2xl p-8 bg-white/50">
+        <h3 class="font-display text-2xl mb-3">Carabao &amp; cattle</h3>
+        <p class="text-sm text-[#1F3327]/75 leading-relaxed">Feeding and breeding schedules paired with the same weather data driving the crop-side advisories, since both share the same farm calendar.</p>
+      </div>
+      <div class="pillar-card border border-[#1F3327]/12 rounded-2xl p-8 bg-white/50">
+        <h3 class="font-display text-2xl mb-3">Farmer registry</h3>
+        <p class="text-sm text-[#1F3327]/75 leading-relaxed">Every household we work with is profiled once — land, herd, and crop — so advisories arrive relevant instead of generic.</p>
+      </div>
+    </div>
+    <div class="rounded-2xl border border-[#1F3327]/12 bg-white/50 p-8 md:p-10 grid sm:grid-cols-3 gap-8">
+      <div>
+        <p class="font-mono text-3xl text-[#4C6B47]">2,900</p>
+        <p class="text-sm text-[#1F3327]/70 mt-2">Farmer households profiled</p>
+      </div>
+      <div>
+        <p class="font-mono text-3xl text-[#4C6B47]">6,100</p>
+        <p class="text-sm text-[#1F3327]/70 mt-2">Livestock heads under monitoring</p>
+      </div>
+      <div>
+        <p class="font-mono text-3xl text-[#4C6B47]">62%</p>
+        <p class="text-sm text-[#1F3327]/70 mt-2">Households raising both crops and livestock</p>
+      </div>
+    </div>
+    <p class="font-mono text-[11px] text-[#1F3327]/40 mt-6">Figures from pilot deployments, 2024–2026. Illustrative — request our latest impact report for verified data.</p>
+  </div>
+</section>
+
+<section id="innovations" class="max-w-6xl mx-auto px-6 md:px-10 py-24 md:py-32">
+  <div class="max-w-2xl mb-16">
+    <p class="font-mono text-xs uppercase tracking-[0.18em] text-[#4C6B47] mb-4">Innovations</p>
+    <h2 class="font-display text-4xl md:text-5xl leading-tight">What we're building next for Philippine agriculture.</h2>
+    <p class="mt-6 text-[#1F3327]/75 leading-relaxed max-w-xl">Some of these are already in the field, others are pilots — all are being tested with real cooperatives before they go anywhere near a wider rollout.</p>
+  </div>
+  <div class="grid sm:grid-cols-2 gap-5">
+    <div class="rounded-2xl p-7 border border-[#1F3327]/12 bg-[#CFE3C2]/40">
+      <span class="font-mono text-xs text-[#2E5266]">In the field</span>
+      <h3 class="font-display text-xl mt-2 mb-2">Drone crop mapping</h3>
+      <p class="text-sm text-[#1F3327]/70 leading-relaxed">Low-altitude multispectral flyovers flag stressed or flooded sections of a field days before they're visible from the paddy edge.</p>
+    </div>
+    <div class="rounded-2xl p-7 border border-[#1F3327]/12 bg-[#CFE3C2]/40">
+      <span class="font-mono text-xs text-[#2E5266]">In the field</span>
+      <h3 class="font-display text-xl mt-2 mb-2">Solar sensor stations</h3>
+      <p class="text-sm text-[#1F3327]/70 leading-relaxed">Off-grid soil and weather stations built for areas without reliable power, reporting over low-bandwidth cellular links.</p>
+    </div>
+    <div class="rounded-2xl p-7 border border-[#1F3327]/12 bg-[#CFE3C2]/40">
+      <span class="font-mono text-xs text-[#C99A3D]">Piloting</span>
+      <h3 class="font-display text-xl mt-2 mb-2">Blockchain traceability</h3>
+      <p class="text-sm text-[#1F3327]/70 leading-relaxed">Farm-to-buyer product tracing for export-grade mango and coconut, giving smallholders proof of origin buyers pay a premium for.</p>
+    </div>
+    <div class="rounded-2xl p-7 border border-[#1F3327]/12 bg-[#CFE3C2]/40">
+      <span class="font-mono text-xs text-[#C99A3D]">Piloting</span>
+      <h3 class="font-display text-xl mt-2 mb-2">Voice-based advisory</h3>
+      <p class="text-sm text-[#1F3327]/70 leading-relaxed">A call-in line for farmers without smartphones — ask a question in Filipino or a regional dialect, get an answer grounded in local field data.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pitch" class="bg-[#1F3327] text-[#EAF3E1]">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-24 md:py-28 grid lg:grid-cols-2 gap-14">
+    <div>
+      <p class="font-mono text-xs uppercase tracking-[0.18em] text-[#C99A3D] mb-4">Pitch an idea</p>
+      <h2 class="font-display text-4xl md:text-5xl leading-tight mb-6">Got a solution farmers actually need?</h2>
+      <p class="text-[#EAF3E1]/75 leading-relaxed max-w-md">We work with founders, researchers, and agri-tech students who have a working idea — a sensor, a model, a distribution channel — and want to test it with real cooperatives instead of a lab.</p>
+      <p class="text-[#EAF3E1]/50 text-sm mt-8">Prefer email? Write to <a href="mailto:pitch@digitalagri.ph" class="underline hover:text-[#C99A3D]">pitch@digitalagri.ph</a></p>
+    </div>
+    <form action="mailto:pitch@digitalagri.ph" method="post" enctype="text/plain" class="flex flex-col gap-4">
+      <div>
+        <label for="pitch-name" class="block text-xs font-mono uppercase tracking-wide text-[#EAF3E1]/60 mb-2">Name</label>
+        <input id="pitch-name" name="name" type="text" required class="w-full rounded-lg bg-[#EAF3E1]/10 border border-[#EAF3E1]/20 px-4 py-3 text-sm text-[#EAF3E1] placeholder-[#EAF3E1]/40 focus:outline-none focus:border-[#C99A3D]" placeholder="Juan Dela Cruz">
+      </div>
+      <div>
+        <label for="pitch-email" class="block text-xs font-mono uppercase tracking-wide text-[#EAF3E1]/60 mb-2">Email</label>
+        <input id="pitch-email" name="email" type="email" required class="w-full rounded-lg bg-[#EAF3E1]/10 border border-[#EAF3E1]/20 px-4 py-3 text-sm text-[#EAF3E1] placeholder-[#EAF3E1]/40 focus:outline-none focus:border-[#C99A3D]" placeholder="you@example.com">
+      </div>
+      <div>
+        <label for="pitch-idea" class="block text-xs font-mono uppercase tracking-wide text-[#EAF3E1]/60 mb-2">Your idea</label>
+        <textarea id="pitch-idea" name="idea" required rows="4" class="w-full rounded-lg bg-[#EAF3E1]/10 border border-[#EAF3E1]/20 px-4 py-3 text-sm text-[#EAF3E1] placeholder-[#EAF3E1]/40 focus:outline-none focus:border-[#C99A3D]" placeholder="What problem does it solve, and for which farmers?"></textarea>
+      </div>
+      <button type="submit" class="mt-2 px-6 py-3.5 rounded-full bg-[#C99A3D] text-[#1F3327] font-medium hover:bg-[#EAF3E1] transition-colors">Send pitch</button>
+    </form>
+  </div>
+</section>
+
+<section id="contact" class="border-t border-[#1F3327]/10">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-24 md:py-28 grid md:grid-cols-2 gap-12 items-end">
+    <div>
+      <h2 class="font-display text-4xl md:text-5xl leading-tight mb-6">Working with a cooperative, an LGU, or an agribusiness?</h2>
+      <p class="text-[#1F3327]/75 leading-relaxed max-w-md">We onboard one province at a time so the models stay accurate to that soil and season. Tell us where you farm and what you're growing.</p>
+    </div>
+    <div class="flex flex-col gap-3 md:items-end">
+      <a href="mailto:hello@digitalagri.ph" class="w-full md:w-auto text-center px-7 py-3.5 rounded-full bg-[#1F3327] text-[#EAF3E1] font-medium hover:bg-[#4C6B47] transition-colors">hello@digitalagri.ph</a>
+      <p class="font-mono text-xs text-[#1F3327]/50">Digital Agriculture of the Philippines OPC</p>
+    </div>
+  </div>
+</section>
+
+<footer class="border-t border-[#1F3327]/10 bg-[#DCEACB]">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-8 flex flex-wrap justify-between items-center gap-4 text-xs text-[#1F3327]/55 font-mono">
+    <p>© 2026 Digital Agriculture of the Philippines OPC</p>
+    <p>Registered One Person Corporation · Republic of the Philippines</p>
+  </div>
+</footer>
+
+
+<!-- AI / Live Agent Assistant -->
+<button class="ai-agent" id="aiAgentBtn" type="button" aria-label="Open AI Agent chat" title="AI Agent">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+    <path d="M7 9h10M7 13h6M12 3a9 9 0 0 1 9 9c0 2.2-.8 4.2-2.2 5.8L20 21l-4-1.3A9 9 0 1 1 12 3Z"/>
+    <circle cx="9" cy="12" r=".5" fill="currentColor"/><circle cx="15" cy="12" r=".5" fill="currentColor"/>
+  </svg>
+</button>
+
+<div class="chat-panel" id="chatPanel" aria-hidden="true">
+  <div class="chat-head">
+    <div>
+      <strong>AI Farm Assistant</strong>
+      <div style="font-size:11px;opacity:.75;">AI bot / live agent support</div>
+    </div>
+    <button id="closeChat" type="button" style="border:0;background:transparent;color:white;font-size:20px;cursor:pointer;" aria-label="Close chat">×</button>
+  </div>
+  <div class="chat-body" id="chatBody">
+    <div class="chat-msg bot-msg">Hello! 👋 I’m the Digital Agriculture assistant. How can I help you today?</div>
+    <div class="chat-msg bot-msg">You can ask about crops, livestock, sensors, partnerships, or how to pitch an idea.</div>
+  </div>
+  <form class="chat-form" id="chatForm">
+    <input id="chatInput" type="text" placeholder="Type your question..." autocomplete="off" aria-label="Chat message">
+    <button type="submit">Send</button>
+  </form>
+</div>
+
+<script>
+(function(){
+  const langBox = document.getElementById('languageSwitcher');
+  const langToggle = document.getElementById('languageToggle');
+  const currentLang = document.getElementById('currentLanguage');
+  langToggle.addEventListener('click', () => {
+    const open = langBox.classList.toggle('open');
+    langToggle.setAttribute('aria-expanded', open);
+  });
+  // Language clicks are handled by the multilingual translation system below.
+
+  const menuBtn = document.getElementById('mobileMenuBtn');
+  const mobileNav = document.getElementById('mobileNav');
+  menuBtn.addEventListener('click', () => {
+    const open = mobileNav.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', open);
+  });
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mobileNav.classList.remove('open');
+    menuBtn.setAttribute('aria-expanded', 'false');
+  }));
+
+  const agent = document.getElementById('aiAgentBtn');
+  const panel = document.getElementById('chatPanel');
+  const close = document.getElementById('closeChat');
+  const body = document.getElementById('chatBody');
+  const form = document.getElementById('chatForm');
+  const input = document.getElementById('chatInput');
+
+  function openChat(){
+    panel.classList.add('open');
+    panel.setAttribute('aria-hidden','false');
+    setTimeout(() => input.focus(), 50);
+  }
+  function closeChat(){
+    panel.classList.remove('open');
+    panel.setAttribute('aria-hidden','true');
+  }
+  agent.addEventListener('click', openChat);
+  close.addEventListener('click', closeChat);
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    const message = input.value.trim();
+    if(!message) return;
+    const user = document.createElement('div');
+    user.className = 'chat-msg user-msg';
+    user.textContent = message;
+    body.appendChild(user);
+
+    const bot = document.createElement('div');
+    bot.className = 'chat-msg bot-msg';
+    bot.textContent = 'Thanks! I received your question. This demo assistant can be connected to a real AI API or live-agent system next.';
+    body.appendChild(bot);
+
+    input.value = '';
+    body.scrollTop = body.scrollHeight;
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  const translations = window.DAPO_TRANSLATIONS = {
+    English: {
+      "nav.work":"What we do","nav.crops":"Focus areas","nav.livestock":"Livestock & farmers","nav.innovations":"Innovations","nav.pitch":"Pitch an idea",
+      "hero.kicker":"Nueva Ecija · Isabela · Ilocos · Batangas · Marinduque",
+      "hero.title":"We read the land<br>so farmers don't<br>have to guess.",
+      "hero.desc":"Digital Agriculture of the Philippines turns soil readings, weather patterns, and market signals into decisions a farmer or cooperative can act on before the next planting season — not after the harvest is already lost.",
+      "hero.partner":"Partner with us","hero.how":"See how it works",
+      "quote":"Farming decisions used to wait for the barangay meeting. Ours wait for the data.",
+      "registered":"One Person Corporation, registered PH",
+      "work.kicker":"How we work","work.title":"Three steps between raw field and a decision that pays off.",
+      "sense.label":"01 · Sense","sense.title":"Ground truth","sense.text":"Low-cost soil, moisture, and weather sensors deployed field-by-field, plus satellite imagery for the plots we can't wire up yet. Every reading is timestamped and geotagged to the actual parcel.",
+      "analyze.label":"02 · Analyze","analyze.title":"Local models","analyze.text":"Yield and pest-risk models trained on Philippine crop cycles, not imported defaults — a palay model that actually knows what a wet-season typhoon does to a Nueva Ecija paddy.",
+      "act.label":"03 · Act","act.title":"In-hand advisory","act.text":"SMS and app alerts in Filipino and regional dialects, routed through cooperative extension workers who already have the farmer's trust — the tech stays behind the person, not in front.",
+      "impact.kicker":"Where we've worked","impact.title":"Early, focused, and still growing.","impact.farms":"Farms with active field data","impact.provinces":"Provinces under coverage","impact.yield":"Avg. yield gain, pilot cohort","impact.coops":"Cooperatives onboarded","impact.note":"Figures from pilot deployments, 2024–2026. Illustrative — request our latest impact report for verified data.",
+      "crops.kicker":"Focus areas","crops.title":"Built around what's actually grown here.",
+      "palay.title":"Palay","palay.text":"Irrigation timing and pest-pressure alerts across wet and dry season plantings.",
+      "mango.title":"Mango","mango.text":"Flower-induction and harvest-window forecasting for export-grade fruit.",
+      "coconut.title":"Coconut","coconut.text":"Long-cycle yield tracking and intercropping recommendations for smallholders.",
+      "sugar.title":"Sugarcane","sugar.text":"Soil nutrient mapping tied directly to milling schedules.",
+      "livestock.kicker":"Livestock & farmers","livestock.title":"The herd matters as much as the harvest.","livestock.intro":"Crop data tells half the story for most smallholder households — the other half is walking around the backyard pen. We track livestock health and connect the farmers behind both.",
+      "swine.title":"Swine & poultry","swine.text":"Early disease-outbreak alerts for backyard and small commercial raisers, built after repeated ASF and avian flu losses across Luzon.",
+      "carabao.title":"Carabao & cattle","carabao.text":"Feeding and breeding schedules paired with the same weather data driving the crop-side advisories, since both share the same farm calendar.",
+      "registry.title":"Farmer registry","registry.text":"Every household we work with is profiled once — land, herd, and crop — so advisories arrive relevant instead of generic.",
+      "households":"Farmer households profiled","heads":"Livestock heads under monitoring","both":"Households raising both crops and livestock",
+      "innovations.kicker":"Innovations","innovations.title":"What we're building next for Philippine agriculture.","innovations.intro":"Some of these are already in the field, others are pilots — all are being tested with real cooperatives before they go anywhere near a wider rollout.",
+      "drone.title":"Drone crop mapping","drone.text":"Low-altitude multispectral flyovers flag stressed or flooded sections of a field days before they're visible from the paddy edge.",
+      "solar.title":"Solar sensor stations","solar.text":"Off-grid soil and weather stations built for areas without reliable power, reporting over low-bandwidth cellular links.",
+      "blockchain.title":"Blockchain traceability","blockchain.text":"Farm-to-buyer product tracing for export-grade mango and coconut, giving smallholders proof of origin buyers pay a premium for.",
+      "voice.title":"Voice-based advisory","voice.text":"A call-in line for farmers without smartphones — ask a question in Filipino or a regional dialect, get an answer grounded in local field data.",
+      "field":"In the field","piloting":"Piloting",
+      "pitch.kicker":"Pitch an idea","pitch.title":"Got a solution farmers actually need?","pitch.text":"We work with founders, researchers, and agri-tech students who have a working idea — a sensor, a model, a distribution channel — and want to test it with real cooperatives instead of a lab.",
+      "pitch.emailpref":"Prefer email? Write to","form.name":"Name","form.email":"Email","form.idea":"Your idea","form.nameph":"Juan Dela Cruz","form.emailph":"you@example.com","form.ideaph":"What problem does it solve, and for which farmers?","form.send":"Send pitch",
+      "contact.title":"Working with a cooperative, an LGU, or an agribusiness?","contact.text":"We onboard one province at a time so the models stay accurate to that soil and season. Tell us where you farm and what you're growing.",
+      "footer.registered":"Registered One Person Corporation · Republic of the Philippines",
+      "chat.title":"AI Farm Assistant","chat.subtitle":"AI bot / live agent support","chat.greeting":"Hello! 👋 I’m the Digital Agriculture assistant. How can I help you today?","chat.help":"You can ask about crops, livestock, sensors, partnerships, or how to pitch an idea.","chat.placeholder":"Type your question...","chat.send":"Send","chat.reply":"Thanks! I received your question. This demo assistant can be connected to a real AI API or live-agent system next."
+    },
+
+    Tagalog: {
+      "nav.work":"Ano ang ginagawa namin","nav.crops":"Mga pokus","nav.livestock":"Mga alagang hayop at magsasaka","nav.innovations":"Mga inobasyon","nav.pitch":"Magmungkahi ng ideya",
+      "hero.kicker":"Nueva Ecija · Isabela · Ilocos · Batangas · Marinduque",
+      "hero.title":"Binabasa namin ang lupa<br>para hindi na manghula<br>ang mga magsasaka.",
+      "hero.desc":"Ginagawang praktikal na desisyon ng Digital Agriculture of the Philippines ang datos ng lupa, panahon, at merkado na maaaring gamitin ng magsasaka o kooperatiba bago ang susunod na taniman — hindi pagkatapos masayang ang ani.",
+      "hero.partner":"Makipagtulungan sa amin","hero.how":"Tingnan kung paano ito gumagana",
+      "quote":"Dati, hinihintay ang pulong sa barangay bago gumawa ng desisyon sa pagsasaka. Ngayon, datos ang hinihintay namin.",
+      "registered":"One Person Corporation, rehistrado sa Pilipinas",
+      "work.kicker":"Paano kami nagtatrabaho","work.title":"Tatlong hakbang mula sa datos ng bukid hanggang sa desisyong may pakinabang.",
+      "sense.label":"01 · Sukat","sense.title":"Tunay na datos","sense.text":"Mababang-gastos na sensor para sa lupa, kahalumigmigan, at panahon ang inilalagay sa bawat bukid, kasama ang satellite imagery para sa mga lupang hindi pa namin kayang lagyan ng sensor. Bawat datos ay may oras at lokasyon.",
+      "analyze.label":"02 · Suri","analyze.title":"Mga lokal na modelo","analyze.text":"Ang mga modelo para sa ani at panganib ng peste ay sinanay gamit ang mga siklo ng pananim sa Pilipinas, hindi basta imported na modelo — kabilang ang modelo ng palay na nakakaunawa sa epekto ng bagyo sa tag-ulan sa Nueva Ecija.",
+      "act.label":"03 · Aksyon","act.title":"Abisong nasa kamay","act.text":"SMS at app alerts sa Filipino at mga lokal na wika, na ipinapadala sa mga extension worker ng kooperatiba na pinagkakatiwalaan na ng mga magsasaka — ang teknolohiya ay katuwang, hindi kapalit ng tao.",
+      "impact.kicker":"Mga lugar na aming napuntahan","impact.title":"Maaga, nakatuon, at patuloy na lumalawak.","impact.farms":"Mga bukid na may aktibong field data","impact.provinces":"Mga probinsyang sakop","impact.yield":"Karaniwang dagdag-ani sa pilot group","impact.coops":"Mga kooperatibang na-onboard","impact.note":"Mga bilang mula sa pilot deployments, 2024–2026. Halimbawa lamang — humingi ng pinakabagong impact report para sa beripikadong datos.",
+      "crops.kicker":"Mga pokus","crops.title":"Nakabatay sa mga tunay na itinatanim dito.",
+      "palay.title":"Palay","palay.text":"Pagtatantiya ng tamang oras ng patubig at alerto sa peste para sa wet at dry season.",
+      "mango.title":"Mangga","mango.text":"Pagtataya ng pamumulaklak at tamang panahon ng pag-aani para sa export-grade na prutas.",
+      "coconut.title":"Niyog","coconut.text":"Pagsubaybay sa pangmatagalang ani at rekomendasyon para sa intercropping ng maliliit na magsasaka.",
+      "sugar.title":"Tubo","sugar.text":"Pagmamapa ng sustansiya ng lupa na direktang inuugnay sa iskedyul ng paggiling.",
+      "livestock.kicker":"Mga alagang hayop at magsasaka","livestock.title":"Mahalaga ang alagang hayop tulad ng ani.","livestock.intro":"Kalahati lamang ng kuwento ang datos ng pananim para sa maraming smallholder household — ang kalahati ay nasa kulungan sa bakuran. Sinusubaybayan namin ang kalusugan ng mga alagang hayop at pinag-uugnay ang mga magsasaka sa likod nito.",
+      "swine.title":"Baboy at manok","swine.text":"Maagang alerto sa pagkalat ng sakit para sa backyard at maliliit na commercial raiser, batay sa mga pagkalugi mula sa ASF at avian flu sa Luzon.",
+      "carabao.title":"Kalabaw at baka","carabao.text":"Iskedyul ng pagpapakain at pagpaparami na kasama ang datos ng panahon na ginagamit sa crop advisories dahil pareho ang kanilang farm calendar.",
+      "registry.title":"Registry ng magsasaka","registry.text":"Isang beses na pag-profile sa bawat household — lupa, alagang hayop, at pananim — upang maging angkop ang mga payo at hindi pangkalahatan.",
+      "households":"Mga farmer household na na-profile","heads":"Mga alagang hayop na mino-monitor","both":"Mga household na may pananim at alagang hayop",
+      "innovations.kicker":"Mga inobasyon","innovations.title":"Mga susunod naming binubuo para sa agrikultura ng Pilipinas.","innovations.intro":"Ang ilan ay ginagamit na sa field at ang iba ay pilot pa lamang — lahat ay sinusubukan kasama ang mga tunay na kooperatiba bago palawakin.",
+      "drone.title":"Drone crop mapping","drone.text":"Ang low-altitude multispectral flights ay tumutukoy sa stressed o binahang bahagi ng bukid bago pa ito madaling makita mula sa gilid ng palayan.",
+      "solar.title":"Solar sensor stations","solar.text":"Mga off-grid soil at weather station para sa mga lugar na walang maaasahang kuryente, na nagpapadala ng datos gamit ang low-bandwidth cellular links.",
+      "blockchain.title":"Blockchain traceability","blockchain.text":"Pagsubaybay sa produkto mula bukid hanggang buyer para sa export-grade na mangga at niyog, na nagbibigay ng patunay ng pinagmulan.",
+      "voice.title":"Voice-based advisory","voice.text":"Call-in line para sa mga magsasakang walang smartphone — magtanong sa Filipino o lokal na wika at tumanggap ng sagot batay sa lokal na field data.",
+      "field":"Ginagamit sa field","piloting":"Pilot",
+      "pitch.kicker":"Magmungkahi ng ideya","pitch.title":"May solusyon ka bang tunay na kailangan ng mga magsasaka?","pitch.text":"Nakikipagtulungan kami sa founders, researchers, at agri-tech students na may gumaganang ideya — sensor, modelo, o distribution channel — at gustong subukan ito sa tunay na kooperatiba.",
+      "pitch.emailpref":"Mas gusto ang email? Sumulat sa","form.name":"Pangalan","form.email":"Email","form.idea":"Iyong ideya","form.nameph":"Juan Dela Cruz","form.emailph":"you@example.com","form.ideaph":"Anong problema ang nalulutas nito, at para sa aling mga magsasaka?","form.send":"Ipadala ang ideya",
+      "contact.title":"Nakikipagtulungan ba kayo sa kooperatiba, LGU, o agribusiness?","contact.text":"Isang probinsya muna ang aming ino-onboard upang manatiling tumpak ang mga modelo sa lupa at panahon. Sabihin kung saan kayo nagsasaka at ano ang itinatanim ninyo.",
+      "footer.registered":"Registered One Person Corporation · Republika ng Pilipinas",
+      "chat.title":"AI Farm Assistant","chat.subtitle":"AI bot / live agent support","chat.greeting":"Kumusta! 👋 Ako ang Digital Agriculture assistant. Paano kita matutulungan?","chat.help":"Maaari kang magtanong tungkol sa pananim, alagang hayop, sensors, partnerships, o pagsusumite ng ideya.","chat.placeholder":"I-type ang iyong tanong...","chat.send":"Ipadala","chat.reply":"Salamat! Natanggap ko ang iyong tanong. Maaari nating ikonekta ang demo assistant na ito sa tunay na AI API o live-agent system."
+    },
+
+    Ilokano: {
+      "nav.work":"Ania ti aramidenmi","nav.crops":"Pokus a lugar","nav.livestock":"Ayup ken mannalon","nav.innovations":"Dagiti inobasion","nav.pitch":"Isumitir ti ideya",
+      "hero.kicker":"Nueva Ecija · Isabela · Ilocos · Batangas · Marinduque",
+      "hero.title":"Basaenmi ti daga<br>tapno saanen a<br>agpatingga ti mannalon.",
+      "hero.desc":"Ti Digital Agriculture of the Philippines ket mangaramid iti datos ti daga, paniempo, ken merkado a nalaka a mausar a desision ti mannalon wenno kooperatiba sakbay ti sumaruno a panagtalon.",
+      "hero.partner":"Makipagtinnulong kadakami","hero.how":"Kitaen no kasano nga agtrabaho",
+      "quote":"Idi, urayen pay ti miting iti barangay sakbay a mangaramid iti desision. Ita, datos ti ur-urayenmi.",
+      "registered":"One Person Corporation, rehistrado iti Pilipinas",
+      "work.kicker":"Kasano nga agtrabaho kami","work.title":"Talllo a tukad manipud datos ti talon agingga iti napateg a desision.",
+      "sense.label":"01 · Sukat","sense.title":"Pudno a datos","sense.text":"Dagiti sensor ti daga, danum, ken paniempo ket maikabil iti tunggal talon, ken mausar met ti satellite imagery. Tunggal datos ket adda oras ken lokasionna.",
+      "analyze.label":"02 · Analisa","analyze.title":"Lokal a modelo","analyze.text":"Dagiti modelo para iti ani ken peste ket nasanay iti siklo ti panagtalon iti Pilipinas, saan a simple nga imported a modelo.",
+      "act.label":"03 · Aksyon","act.title":"Payo a maawat","act.text":"SMS ken app alerts iti Filipino ken rehional a pagsasao, babaen kadagiti extension worker ti kooperatiba a pagtalkan dagiti mannalon.",
+      "impact.kicker":"Dagiti lugar a nagtrabahuanmi","impact.title":"Nasapa, nakapokus, ken agtultuloy a dumakkel.","impact.farms":"Talon nga adda aktibo a field data","impact.provinces":"Probinsia nga sakop","impact.yield":"Average a pannakadakkel ti ani","impact.coops":"Kooperatiba a na-onboard","impact.note":"Dagiti bilang ket manipud pilot deployments, 2024–2026. Ilustratibo laeng — dawaten ti kabaruan nga impact report para iti beripikado a datos.",
+      "crops.kicker":"Pokus a lugar","crops.title":"Nabukel iti pudno a matalon ditoy.",
+      "palay.title":"Palay","palay.text":"Pannakaammo iti umiso nga oras ti irigasion ken alerto iti peste.",
+      "mango.title":"Mangga","mango.text":"Pagtaya iti panagbulaklak ken panagani para iti export-grade a prutas.",
+      "coconut.title":"Niyog","coconut.text":"Pannakasubaybay iti nabayag a ani ken rekomendasion iti intercropping.",
+      "sugar.title":"Tubo","sugar.text":"Pagmamapa iti sustansia ti daga a mainaig iti iskedyul ti paggiling.",
+      "livestock.kicker":"Ayup ken mannalon","livestock.title":"Napateg ti ayup kas iti ani.","livestock.intro":"Kalahati laeng ti istoria ti panagtalon ti crop data — ti sabali ket adda iti kulungan. Subaybayanmi ti salun-at dagiti ayup ken ti mannalon.",
+      "swine.title":"Baboy ken manok","swine.text":"Nasapa a alerto iti sakit para kadagiti backyard ken bassit a raiser.",
+      "carabao.title":"Karabao ken baka","carabao.text":"Iskedyul iti panagpakana ken panagparami a naisabay iti datos ti paniempo.",
+      "registry.title":"Farmer registry","registry.text":"Tunggal household ket ma-profile iti daga, ayup, ken mula tapno umiso ti maited a payo.",
+      "households":"Farmer households a na-profile","heads":"Ayup a mino-monitor","both":"Households nga agmula ken agalaga iti ayup",
+      "innovations.kicker":"Inobasion","innovations.title":"Dagiti sumaruno a binubukelmi para iti agrikultura iti Pilipinas.","innovations.intro":"Adda dagiti naaramidnan iti field ken adda pay pilot — amin ket subokmi kadagiti pudno a kooperatiba.",
+      "drone.title":"Drone crop mapping","drone.text":"Dagiti multispectral drone flight ket makatulong a mangammo iti stressed wenno binabaha a paset ti talon.",
+      "solar.title":"Solar sensor stations","solar.text":"Soil ken weather stations nga agtrabaho iti solar power para kadagiti lugar nga awan ti natalged a kuryente.",
+      "blockchain.title":"Blockchain traceability","blockchain.text":"Pannakasubaybay ti produkto manipud talon agingga buyer para iti export-grade a mangga ken niyog.",
+      "voice.title":"Voice-based advisory","voice.text":"Call-in line para kadagiti awan smartphone — agsaludsod iti Filipino wenno lokal a pagsasao.",
+      "field":"Iti field","piloting":"Pilot",
+      "pitch.kicker":"Isumitir ti ideya","pitch.title":"Adda kadi solusion a pudno a kasapulan dagiti mannalon?","pitch.text":"Makipagtinnulong kami kadagiti founder, researcher, ken agri-tech student nga adda ideya a kayatda a suboken kadagiti kooperatiba.",
+      "pitch.emailpref":"Kayatmo ti email? Isurat iti","form.name":"Nagan","form.email":"Email","form.idea":"Ideyam","form.nameph":"Juan Dela Cruz","form.emailph":"you@example.com","form.ideaph":"Ania a problema ti risolbanna, ken para kadagino a mannalon?","form.send":"I-send ti ideya",
+      "contact.title":"Makipagtinnulongka iti kooperatiba, LGU, wenno agribusiness?","contact.text":"Maysa a probinsia iti maysa a tiempo tapno umiso dagiti modelo iti daga ken tiempo. Ibagam no sadino ti talonmo ken ania ti mulam.",
+      "footer.registered":"Registered One Person Corporation · Republic of the Philippines",
+      "chat.title":"AI Farm Assistant","chat.subtitle":"AI bot / live agent support","chat.greeting":"Kumusta! 👋 Siak ti Digital Agriculture assistant. Kasano a makatulongak?","chat.help":"Mabalin nga agsaludsod maipanggep iti mula, ayup, sensor, partnership, wenno ideya.","chat.placeholder":"Isurat ti saludsodmo...","chat.send":"I-send","chat.reply":"Agyamanak! Nawatmi ti saludsodmo. Mabalin a maikonekta daytoy a demo assistant iti pudno nga AI API wenno live-agent system."
+    },
+
+    Bisaya: {
+      "nav.work":"Unsa among gibuhat","nav.crops":"Mga pokus nga lugar","nav.livestock":"Mga hayop ug mag-uuma","nav.innovations":"Mga inobasyon","nav.pitch":"Isumite ang ideya",
+      "hero.kicker":"Nueva Ecija · Isabela · Ilocos · Batangas · Marinduque",
+      "hero.title":"Atong basahon ang yuta<br>aron dili na<br>manghula ang mag-uuma.",
+      "hero.desc":"Ang Digital Agriculture of the Philippines nag-usab sa datos sa yuta, panahon, ug merkado ngadto sa mga desisyon nga magamit sa mag-uuma o kooperatiba sa dili pa ang sunod nga panahon sa pagtanom.",
+      "hero.partner":"Makigtambayayong kanamo","hero.how":"Tan-awa kung giunsa kini pagtrabaho",
+      "quote":"Sa una, maghulat pa sa miting sa barangay. Karon, datos na ang among gihulat.",
+      "registered":"One Person Corporation, rehistrado sa Pilipinas",
+      "work.kicker":"Giunsa namo pagtrabaho","work.title":"Tulo ka lakang gikan sa datos sa uma ngadto sa desisyon nga mapuslanon.",
+      "sense.label":"01 · Sukod","sense.title":"Tinuod nga datos","sense.text":"Mga sensor sa yuta, kaumog, ug panahon ang gibutang sa matag uma, uban sa satellite imagery. Ang matag datos adunay oras ug lokasyon.",
+      "analyze.label":"02 · Analisa","analyze.title":"Lokal nga mga modelo","analyze.text":"Ang mga modelo sa ani ug risgo sa peste gibansay gamit ang mga siklo sa tanom sa Pilipinas.",
+      "act.label":"03 · Aksyon","act.title":"Tambag nga maabot sa mag-uuma","act.text":"SMS ug app alerts sa Filipino ug lokal nga pinulongan pinaagi sa extension workers sa kooperatiba nga kasaligan sa mga mag-uuma.",
+      "impact.kicker":"Asa kami nakatrabaho","impact.title":"Sayo, nakapokus, ug padayon nga nagtubo.","impact.farms":"Mga uma nga adunay aktibong field data","impact.provinces":"Mga probinsyang sakop","impact.yield":"Kasagarang pagtaas sa ani","impact.coops":"Mga kooperatibang na-onboard","impact.note":"Mga numero gikan sa pilot deployments, 2024–2026. Ilustrasyon lamang — pangayo sa pinakabag-ong impact report alang sa beripikadong datos.",
+      "crops.kicker":"Mga pokus","crops.title":"Gibase sa tinuod nga gitanom dinhi.",
+      "palay.title":"Palay","palay.text":"Timing sa irigasyon ug mga alerto sa peste sa wet ug dry season.",
+      "mango.title":"Mangga","mango.text":"Pagtagna sa pagpamukadkad ug panahon sa pag-ani alang sa export-grade nga prutas.",
+      "coconut.title":"Niyog","coconut.text":"Pagsubay sa dugay nga ani ug rekomendasyon sa intercropping.",
+      "sugar.title":"Tubo","sugar.text":"Pagmapa sa nutrients sa yuta nga konektado sa milling schedules.",
+      "livestock.kicker":"Mga hayop ug mag-uuma","livestock.title":"Importante ang mga hayop sama sa ani.","livestock.intro":"Katunga ra sa istorya ang crop data para sa gagmay nga household farm — ang lain naa sa kulungan. Gisubay namo ang kahimsog sa hayop ug ang mag-uuma nga nag-atiman niini.",
+      "swine.title":"Baboy ug manok","swine.text":"Sayo nga alerto sa pag-ulbo sa sakit alang sa backyard ug gagmay nga raiser.",
+      "carabao.title":"Karabaw ug baka","carabao.text":"Iskedyul sa pagpakaon ug pagpasanay nga giuban sa datos sa panahon.",
+      "registry.title":"Farmer registry","registry.text":"Ang matag household ma-profile sa yuta, hayop, ug tanom aron ang tambag tukma.",
+      "households":"Mga farmer household nga na-profile","heads":"Mga hayop nga mino-monitor","both":"Mga household nga adunay tanom ug hayop",
+      "innovations.kicker":"Mga inobasyon","innovations.title":"Unsa among sunod nga ginatukod para sa agrikultura sa Pilipinas.","innovations.intro":"Ang uban naa na sa field ug ang uban pilot pa — tanan gisulayan uban sa tinuod nga kooperatiba.",
+      "drone.title":"Drone crop mapping","drone.text":"Ang multispectral drone flights makatabang sa pag-ila sa stressed o nabahaan nga bahin sa uma.",
+      "solar.title":"Solar sensor stations","solar.text":"Soil ug weather stations nga solar-powered para sa mga lugar nga walay kasaligan nga kuryente.",
+      "blockchain.title":"Blockchain traceability","blockchain.text":"Pagsubay sa produkto gikan sa uma ngadto sa buyer alang sa export-grade nga mangga ug niyog.",
+      "voice.title":"Voice-based advisory","voice.text":"Call-in line alang sa mga mag-uuma nga walay smartphone — pangutana sa Filipino o lokal nga pinulongan.",
+      "field":"Sa field","piloting":"Pilot",
+      "pitch.kicker":"Isumite ang ideya","pitch.title":"Aduna kay solusyon nga tinuod nga gikinahanglan sa mga mag-uuma?","pitch.text":"Nakigtambayayong kami sa founders, researchers, ug agri-tech students nga adunay ideya ug gusto kini sulayan sa tinuod nga mga kooperatiba.",
+      "pitch.emailpref":"Mas gusto ang email? Isulat sa","form.name":"Ngalan","form.email":"Email","form.idea":"Imong ideya","form.nameph":"Juan Dela Cruz","form.emailph":"you@example.com","form.ideaph":"Unsa nga problema ang masulbad niini, ug para kang kinsang mag-uuma?","form.send":"Ipadala ang ideya",
+      "contact.title":"Nakigtambayayong ba mo sa kooperatiba, LGU, o agribusiness?","contact.text":"Usa ka probinsya matag higayon aron tukma ang mga modelo sa yuta ug panahon. Sultihi kami asa mo nag-uma ug unsa ang inyong gitanom.",
+      "footer.registered":"Registered One Person Corporation · Republic of the Philippines",
+      "chat.title":"AI Farm Assistant","chat.subtitle":"AI bot / live agent support","chat.greeting":"Hello! 👋 Ako ang Digital Agriculture assistant. Unsa akong ikatabang?","chat.help":"Pwede ka mangutana bahin sa tanom, hayop, sensors, partnerships, o ideya.","chat.placeholder":"I-type ang imong pangutana...","chat.send":"Ipadala","chat.reply":"Salamat! Nadawat nako imong pangutana. Ang demo assistant mahimong ikonektar sa tinuod nga AI API o live-agent system."
+    },
+
+    Kapampangan: {
+      "nav.work":"Nanu ing gagawan mi","nav.crops":"Pokus a lugar","nav.livestock":"Ayup at talamu","nav.innovations":"Dagdag a inobasyon","nav.pitch":"I-submit ing ideya",
+      "hero.kicker":"Nueva Ecija · Isabela · Ilocos · Batangas · Marinduque",
+      "hero.title":"Babasán mi ing lupa<br>para e na kailangan<br>manghula ing talamu.",
+      "hero.desc":"Ing Digital Agriculture of the Philippines gagawan nang desisyon ing datos ning lupa, panahon, at merkadu a makagamit ing talamu o kooperatiba bago ing kasunod a tanam.",
+      "hero.partner":"Makipag-partner keka","hero.how":"Masdan nung makananu ya",
+      "quote":"Dati, manintun tamu pa ning miting king barangay. Ngeni, datos ing aantayan mi.",
+      "registered":"One Person Corporation, rehistrado king Pilipinas",
+      "work.kicker":"Makananu mi gagawan","work.title":"Atlung hakbang mula king datos ning uma hanggang king desisyon a makasaup.",
+      "sense.label":"01 · Sukat","sense.title":"Tutu a datos","sense.text":"Low-cost sensors para king lupa, moisture, at panahon a ikabit king balang uma, pati satellite imagery. Bawat datos atin yang oras at lokasyon.",
+      "analyze.label":"02 · Suri","analyze.title":"Lokal a modelo","analyze.text":"Ing yield at pest-risk models sinanay king crop cycles ning Pilipinas, e imported defaults.",
+      "act.label":"03 · Gawa","act.title":"Payo a mapalapit king talamu","act.text":"SMS at app alerts king Filipino at regional dialects, baba ning cooperative extension workers a pagkakatiwalaan da ning talamu.",
+      "impact.kicker":"Nukarin tamu na-trabahu","impact.title":"Maaga, fokus, at patuluy a lumalawak.","impact.farms":"Uma a atin aktibong field data","impact.provinces":"Probinsyang sakop","impact.yield":"Average a dagdag-ani","impact.coops":"Kooperatibang na-onboard","impact.note":"Datos mula pilot deployments, 2024–2026. Ilustratibo la reng bilang — humingi king latest impact report para verified a datos.",
+      "crops.kicker":"Pokus a lugar","crops.title":"Ginawang base king talagang tinatanam keni.",
+      "palay.title":"Palay","palay.text":"Timing ning irigasyon at alerto king peste king wet at dry season.",
+      "mango.title":"Mangga","mango.text":"Forecast king pamulaklak at harvest window para export-grade a prutas.",
+      "coconut.title":"Niyog","coconut.text":"Pagsubaybay king long-cycle yield at intercropping recommendations.",
+      "sugar.title":"Tubo","sugar.text":"Pagmapa ning nutrients ning lupa a direktang konektadu king milling schedule.",
+      "livestock.kicker":"Ayup at talamu","livestock.title":"Mahalaga ing ayup kas ning ani.","livestock.intro":"Kalahati mu ing istorya ning crop data para king smallholder household — ing sablang kalahati atin king kulungan. Susubaybayan mi ing kalusugan ning ayup at ing talamu.",
+      "swine.title":"Baboy at manuk","swine.text":"Maagang alerto king sakit para backyard at small commercial raisers.",
+      "carabao.title":"Kalabaw at baka","carabao.text":"Feeding at breeding schedules a kasabay ning weather data.",
+      "registry.title":"Farmer registry","registry.text":"Balang household ma-profile king lupa, ayup, at tanam para tukma ing payo.",
+      "households":"Farmer households a na-profile","heads":"Ayup a mino-monitor","both":"Households a atin tanam at ayup",
+      "innovations.kicker":"Inobasyon","innovations.title":"Nanu ing susunod a bubuuan mi para king agrikultura ning Pilipinas.","innovations.intro":"Makalating king field ing aliwa at pilot pa ing aliwa — balamu subuk tamu kareng tunay a kooperatiba.",
+      "drone.title":"Drone crop mapping","drone.text":"Multispectral drone flights a makasaup king pagtuking stressed o binahang parte ning uma.",
+      "solar.title":"Solar sensor stations","solar.text":"Soil at weather stations a solar-powered para king lugar a alang reliable a kuryente.",
+      "blockchain.title":"Blockchain traceability","blockchain.text":"Pagsubaybay ning produkto mula uma hanggang buyer para export-grade a mangga at niyog.",
+      "voice.title":"Voice-based advisory","voice.text":"Call-in line para king talamu a alang smartphone — saludsod king Filipino o regional dialect.",
+      "field":"King field","piloting":"Pilot",
+      "pitch.kicker":"I-submit ing ideya","pitch.title":"Atin kang solusyon a kailangan da talaga ning talamu?","pitch.text":"Makipagtrabahu kami kareng founders, researchers, at agri-tech students a atin ideya at buri lang subukan king tunay a kooperatiba.",
+      "pitch.emailpref":"Mas buri ing email? Sulat king","form.name":"Nagan","form.email":"Email","form.idea":"Ing ideya mu","form.nameph":"Juan Dela Cruz","form.emailph":"you@example.com","form.ideaph":"Nanu ing problemang sosolusyunan na, at para kaninu a talamu?","form.send":"I-send ing ideya",
+      "contact.title":"Makipagtrabahu ka king kooperatiba, LGU, o agribusiness?","contact.text":"Misan a probinsya kada oras para manatiling accurate ing modelo king lupa at season. Sabyan mu kaku nokarin ka mananim at nanu ing tanam mu.",
+      "footer.registered":"Registered One Person Corporation · Republic of the Philippines",
+      "chat.title":"AI Farm Assistant","chat.subtitle":"AI bot / live agent support","chat.greeting":"Hello! 👋 Aku ing Digital Agriculture assistant. Makananu ku makatulong?","chat.help":"Makasaludsod ka tungkol king tanam, ayup, sensors, partnerships, o ideya.","chat.placeholder":"I-type ing saludsud mu...","chat.send":"I-send","chat.reply":"Salamat! Tinanggap ku ing saludsud mu. Maikonekta tamu ing demo assistant king tunay a AI API o live-agent system."
+    },
+
+    Batangas: {
+      "nav.work":"Ano ang ginagawa namin","nav.crops":"Mga pokus","nav.livestock":"Mga hayop at magsasaka","nav.innovations":"Mga inobasyon","nav.pitch":"Magbigay ng ideya",
+      "hero.kicker":"Nueva Ecija · Isabela · Ilocos · Batangas · Marinduque",
+      "hero.title":"Binabasa namin ang lupa<br>para hindi na manghula<br>ang magsasaka.",
+      "hero.desc":"Ginagawang desisyon ng Digital Agriculture of the Philippines ang datos ng lupa, panahon, at merkado para magamit ng magsasaka o kooperatiba bago ang susunod na taniman.",
+      "hero.partner":"Makipagtulungan sa amin","hero.how":"Tingnan kung paano gumagana",
+      "quote":"Dati, hinihintay pa ang pulong sa barangay. Ngayon, datos na ang hinihintay namin.",
+      "registered":"One Person Corporation, rehistrado sa Pilipinas",
+      "work.kicker":"Paano kami nagtatrabaho","work.title":"Tatlong hakbang mula sa datos ng bukid hanggang sa desisyong may pakinabang.",
+      "sense.label":"01 · Sukat","sense.title":"Tamang datos","sense.text":"Mga sensor para sa lupa, tubig, at panahon ang inilalagay sa bawat bukid, kasama ang satellite imagery. Bawat datos ay may oras at lokasyon.",
+      "analyze.label":"02 · Suri","analyze.title":"Lokal na modelo","analyze.text":"Ang mga modelo sa ani at peste ay sinanay gamit ang mga siklo ng pananim sa Pilipinas.",
+      "act.label":"03 · Aksyon","act.title":"Payo na madaling gamitin","act.text":"SMS at app alerts sa Filipino at mga lokal na salita, ipinapadala sa mga extension worker na pinagkakatiwalaan ng magsasaka.",
+      "impact.kicker":"Mga lugar na napuntahan namin","impact.title":"Maaga, nakatuon, at patuloy na lumalago.","impact.farms":"Mga bukid na may aktibong field data","impact.provinces":"Mga probinsyang sakop","impact.yield":"Karaniwang dagdag-ani","impact.coops":"Mga kooperatibang na-onboard","impact.note":"Mga bilang mula sa pilot deployments, 2024–2026. Halimbawa lamang — humingi ng latest impact report para sa beripikadong datos.",
+      "crops.kicker":"Mga pokus","crops.title":"Nakabase sa mga tunay na itinatanim dito.",
+      "palay.title":"Palay","palay.text":"Tamang oras ng patubig at alerto sa peste sa wet at dry season.",
+      "mango.title":"Mangga","mango.text":"Pagtaya sa pamumulaklak at panahon ng pag-aani para sa export-grade na prutas.",
+      "coconut.title":"Niyog","coconut.text":"Pagsubaybay sa pangmatagalang ani at rekomendasyon sa intercropping.",
+      "sugar.title":"Tubo","sugar.text":"Pagmamapa ng sustansiya ng lupa na konektado sa milling schedule.",
+      "livestock.kicker":"Mga hayop at magsasaka","livestock.title":"Mahalaga ang hayop tulad ng ani.","livestock.intro":"Kalahati lang ng kuwento ang crop data para sa maliit na farm household — ang kalahati ay nasa kulungan. Sinusubaybayan namin ang kalusugan ng hayop at ang magsasaka.",
+      "swine.title":"Baboy at manok","swine.text":"Maagang alerto sa sakit para sa backyard at maliliit na raiser.",
+      "carabao.title":"Kalabaw at baka","carabao.text":"Iskedyul ng pagpapakain at pagpaparami na kasabay ng datos ng panahon.",
+      "registry.title":"Farmer registry","registry.text":"Bawat household ay naka-profile sa lupa, hayop, at pananim para tama ang payo.",
+      "households":"Mga farmer household na na-profile","heads":"Mga hayop na mino-monitor","both":"Mga household na may pananim at hayop",
+      "innovations.kicker":"Mga inobasyon","innovations.title":"Mga susunod naming ginagawa para sa agrikultura ng Pilipinas.","innovations.intro":"May ilan nang nasa field at may pilot pa — lahat ay sinusubukan sa tunay na kooperatiba.",
+      "drone.title":"Drone crop mapping","drone.text":"Multispectral drone flights para makita ang stressed o binahang bahagi ng bukid.",
+      "solar.title":"Solar sensor stations","solar.text":"Soil at weather stations na solar-powered para sa mga lugar na kulang sa kuryente.",
+      "blockchain.title":"Blockchain traceability","blockchain.text":"Pagsubaybay sa produkto mula bukid hanggang buyer para sa export-grade na mangga at niyog.",
+      "voice.title":"Voice-based advisory","voice.text":"Call-in line para sa magsasakang walang smartphone — magtanong sa Filipino o lokal na salita.",
+      "field":"Nasa field","piloting":"Pilot",
+      "pitch.kicker":"Magbigay ng ideya","pitch.title":"May solusyon ka bang talagang kailangan ng magsasaka?","pitch.text":"Nakikipagtulungan kami sa founders, researchers, at agri-tech students na may ideya at gustong subukan ito sa tunay na kooperatiba.",
+      "pitch.emailpref":"Mas gusto ang email? Sumulat sa","form.name":"Pangalan","form.email":"Email","form.idea":"Ideya mo","form.nameph":"Juan Dela Cruz","form.emailph":"you@example.com","form.ideaph":"Anong problema ang lulutasin nito, at para sa sinong magsasaka?","form.send":"Ipadala ang ideya",
+      "contact.title":"May kasama ba kayong kooperatiba, LGU, o agribusiness?","contact.text":"Isang probinsya muna bawat pagkakataon para tama ang modelo sa lupa at panahon. Sabihin kung saan kayo nagsasaka at ano ang itinatanim.",
+      "footer.registered":"Registered One Person Corporation · Republic of the Philippines",
+      "chat.title":"AI Farm Assistant","chat.subtitle":"AI bot / live agent support","chat.greeting":"Kumusta! 👋 Ako ang Digital Agriculture assistant. Ano ang maitutulong ko?","chat.help":"Maaari kang magtanong tungkol sa tanim, hayop, sensors, partnerships, o ideya.","chat.placeholder":"I-type ang tanong...","chat.send":"Ipadala","chat.reply":"Salamat! Natanggap ko ang tanong mo. Maaari nating ikonekta ang demo assistant sa totoong AI API o live-agent system."
+    },
+
+    Iloilo: {
+      "nav.work":"Ano ang ginahimo namon","nav.crops":"Mga pokus","nav.livestock":"Mga sapat kag mangunguma","nav.innovations":"Mga inobasyon","nav.pitch":"Maghatag sang ideya",
+      "hero.kicker":"Nueva Ecija · Isabela · Ilocos · Batangas · Marinduque",
+      "hero.title":"Ginabasa namon ang duta<br>agud indi na<br>magpanghula ang mangunguma.",
+      "hero.desc":"Ang Digital Agriculture of the Philippines nagahimo sang datos sa duta, panahon, kag merkado nga mangin desisyon para sa mangunguma ukon kooperatiba antes ang masunod nga tanuman.",
+      "hero.partner":"Makig-upod sa amon","hero.how":"Tan-awa kon paano ini nagatrabaho",
+      "quote":"Sang una, nagaulat pa sang miting sa barangay. Subong, datos ang ginahulat namon.",
+      "registered":"One Person Corporation, rehistrado sa Pilipinas",
+      "work.kicker":"Paano kami nagatrabaho","work.title":"Tatlo ka tikang halin sa datos sang uma pakadto sa desisyon nga may pulos.",
+      "sense.label":"01 · Sukod","sense.title":"Matuod nga datos","sense.text":"Mga sensor para sa duta, kaumog, kag panahon ang ginabutang sa tagsa ka uma, upod ang satellite imagery. Ang tagsa ka datos may oras kag lokasyon.",
+      "analyze.label":"02 · Suri","analyze.title":"Lokal nga mga modelo","analyze.text":"Ang mga modelo sa ani kag peste gin-train gamit ang mga siklo sang pananom sa Pilipinas.",
+      "act.label":"03 · Aksyon","act.title":"Tambag nga maabot sang mangunguma","act.text":"SMS kag app alerts sa Filipino kag lokal nga mga pulong, paagi sa cooperative extension workers nga ginatugyanan sang mga mangunguma.",
+      "impact.kicker":"Diin kami nagtrabaho","impact.title":"Sayo, nakapokus, kag padayon nga nagatubo.","impact.farms":"Mga uma nga may aktibo nga field data","impact.provinces":"Mga probinsya nga sakop","impact.yield":"Average nga pagdugang sang ani","impact.coops":"Mga kooperatiba nga na-onboard","impact.note":"Mga numero halin sa pilot deployments, 2024–2026. Ilustratibo lamang — pangayo sang latest impact report para sa beripikado nga datos.",
+      "crops.kicker":"Mga pokus","crops.title":"Ginbase sa ginatamnan gid diri.",
+      "palay.title":"Palay","palay.text":"Timing sang irigasyon kag mga alerto sa peste sa wet kag dry season.",
+      "mango.title":"Mangga","mango.text":"Pagtagna sang pagpamulak kag harvest window para sa export-grade nga prutas.",
+      "coconut.title":"Niyog","coconut.text":"Pagsubay sang long-cycle yield kag rekomendasyon sa intercropping.",
+      "sugar.title":"Tubo","sugar.text":"Pagmapa sang nutrients sang duta nga konektado sa milling schedule.",
+      "livestock.kicker":"Mga sapat kag mangunguma","livestock.title":"Importante ang sapat pareho sang ani.","livestock.intro":"Katunga lang sang istorya ang crop data para sa smallholder household — ang isa ka katunga ara sa kulungan. Ginatan-aw namon ang kahimsog sang sapat kag ang mangunguma.",
+      "swine.title":"Baboy kag manok","swine.text":"Sayo nga alerto sa paglapta sang balatian para sa backyard kag gagmay nga raiser.",
+      "carabao.title":"Karabaw kag baka","carabao.text":"Iskedyul sang pagpakaon kag pagpasanay nga ginaupod sa datos sang panahon.",
+      "registry.title":"Farmer registry","registry.text":"Ang tagsa ka household ginaprofile sa duta, sapat, kag tanom agud husto ang tambag.",
+      "households":"Mga farmer household nga na-profile","heads":"Mga sapat nga mino-monitor","both":"Mga household nga may tanom kag sapat",
+      "innovations.kicker":"Mga inobasyon","innovations.title":"Mga sunod namon nga ginatukod para sa agrikultura sang Pilipinas.","innovations.intro":"Ang iban yara na sa field kag ang iban pilot pa — tanan ginatest upod ang matuod nga mga kooperatiba.",
+      "drone.title":"Drone crop mapping","drone.text":"Multispectral drone flights para makita ang stressed ukon nabahaan nga parte sang uma.",
+      "solar.title":"Solar sensor stations","solar.text":"Soil kag weather stations nga solar-powered para sa mga lugar nga indi masaligan ang kuryente.",
+      "blockchain.title":"Blockchain traceability","blockchain.text":"Pagsubay sang produkto halin uma pakadto buyer para sa export-grade nga mangga kag niyog.",
+      "voice.title":"Voice-based advisory","voice.text":"Call-in line para sa mangunguma nga wala smartphone — pamangkot sa Filipino ukon lokal nga pulong.",
+      "field":"Sa field","piloting":"Pilot",
+      "pitch.kicker":"Maghatag sang ideya","pitch.title":"May solusyon ka nga kinahanglan gid sang mga mangunguma?","pitch.text":"Nagatrabaho kami upod sa founders, researchers, kag agri-tech students nga may ideya kag gusto ini matesting sa matuod nga kooperatiba.",
+      "pitch.emailpref":"Mas gusto ang email? Isulat sa","form.name":"Ngalan","form.email":"Email","form.idea":"Imo ideya","form.nameph":"Juan Dela Cruz","form.emailph":"you@example.com","form.ideaph":"Ano nga problema ang masolbar sini, kag para sa diin nga mga mangunguma?","form.send":"Ipadala ang ideya",
+      "contact.title":"Nagatrabaho ka upod sa kooperatiba, LGU, ukon agribusiness?","contact.text":"Isa ka probinsya kada tion agud magpabilin nga husto ang mga modelo sa duta kag panahon. Sugiri kami diin kamo nagapanguma kag ano ang ginatanom.",
+      "footer.registered":"Registered One Person Corporation · Republic of the Philippines",
+      "chat.title":"AI Farm Assistant","chat.subtitle":"AI bot / live agent support","chat.greeting":"Hello! 👋 Ako ang Digital Agriculture assistant. Paano ako makabulig?","chat.help":"Pwede ka mamangkot parte sa tanom, sapat, sensors, partnerships, ukon ideya.","chat.placeholder":"I-type ang imo pamangkot...","chat.send":"Ipadala","chat.reply":"Salamat! Nabaton ko ang imo pamangkot. Mahimo naton ikonekta ang demo assistant sa matuod nga AI API ukon live-agent system."
+    }
+  };
+
+  // Ilokano/Tagalog/Bisaya/etc. are intentionally represented as site UI translations,
+  // while technical/product terms such as SMS, app, AI, drone and blockchain remain recognizable.
+  const map = {
+    "a[href='#work']":"nav.work","a[href='#crops']":"nav.crops","a[href='#livestock']":"nav.livestock","a[href='#innovations']":"nav.innovations","a[href='#pitch']":"nav.pitch",
+    "section#work p":"work.kicker","section#work h2":"work.title",
+    "section#impact p:first-child":"impact.kicker","section#impact h2":"impact.title",
+    "#crops p":"crops.kicker","#crops h2":"crops.title",
+    "#livestock p:first-child":"livestock.kicker","#livestock h2":"livestock.title",
+    "#innovations p:first-child":"innovations.kicker","#innovations h2":"innovations.title"
+  };
+
+  // Add translation keys to the existing HTML by element identity/order.
+  function assignKeys(){
+    const qs = s => document.querySelector(s);
+    const set = (el,key,attr) => { if(el) el.dataset.i18n=key; if(el && attr) el.dataset.i18nAttr=attr; };
+
+    document.querySelectorAll('header nav a')[0] && set(document.querySelectorAll('header nav a')[0],'nav.work');
+    document.querySelectorAll('header nav a')[1] && set(document.querySelectorAll('header nav a')[1],'nav.crops');
+    document.querySelectorAll('header nav a')[2] && set(document.querySelectorAll('header nav a')[2],'nav.livestock');
+    document.querySelectorAll('header nav a')[3] && set(document.querySelectorAll('header nav a')[3],'nav.innovations');
+    document.querySelectorAll('header nav a')[4] && set(document.querySelectorAll('header nav a')[4],'nav.pitch');
+
+    document.querySelectorAll('.mobile-nav a')[0] && set(document.querySelectorAll('.mobile-nav a')[0],'nav.work');
+    document.querySelectorAll('.mobile-nav a')[1] && set(document.querySelectorAll('.mobile-nav a')[1],'nav.crops');
+    document.querySelectorAll('.mobile-nav a')[2] && set(document.querySelectorAll('.mobile-nav a')[2],'nav.livestock');
+    document.querySelectorAll('.mobile-nav a')[3] && set(document.querySelectorAll('.mobile-nav a')[3],'nav.innovations');
+    document.querySelectorAll('.mobile-nav a')[4] && set(document.querySelectorAll('.mobile-nav a')[4],'nav.pitch');
+
+    const hero = document.querySelector('section.relative.pt-36');
+    if(hero){
+      set(hero.querySelector('p'),'hero.kicker');
+      set(hero.querySelector('h1'),'hero.title');
+      set(hero.querySelectorAll('p')[1],'hero.desc');
+      set(hero.querySelectorAll('a')[0],'hero.partner');
+      set(hero.querySelectorAll('a')[1],'hero.how');
+    }
+
+    set(document.querySelector('section.border-y p.font-display'),'quote');
+    set(document.querySelector('section.border-y p.font-mono'),'registered');
+
+    const work=document.querySelector('#work');
+    if(work){
+      set(work.querySelector('p'),'work.kicker'); set(work.querySelector('h2'),'work.title');
+      const cards=work.querySelectorAll('.pillar-card');
+      [['sense.label','sense.title','sense.text'],['analyze.label','analyze.title','analyze.text'],['act.label','act.title','act.text']].forEach((keys,i)=>{
+        if(cards[i]) [cards[i].querySelector('span'),cards[i].querySelector('h3'),cards[i].querySelector('p')].forEach((el,j)=>set(el,keys[j]));
+      });
+    }
+
+    const impact=document.querySelector('#impact');
+    if(impact){
+      set(impact.querySelector('p'),'impact.kicker'); set(impact.querySelector('h2'),'impact.title');
+      const labels=impact.querySelectorAll('.grid > div p:last-child');
+      ['impact.farms','impact.provinces','impact.yield','impact.coops'].forEach((k,i)=>set(labels[i],k));
+      set(impact.querySelector('p.font-mono.text-\\[11px\\]'),'impact.note');
+    }
+
+    const crops=document.querySelector('#crops');
+    if(crops){
+      set(crops.querySelector('p'),'crops.kicker'); set(crops.querySelector('h2'),'crops.title');
+      const cards=crops.querySelectorAll('.grid > div');
+      [['palay.title','palay.text'],['mango.title','mango.text'],['coconut.title','coconut.text'],['sugar.title','sugar.text']].forEach((keys,i)=>{
+        if(cards[i]) [cards[i].querySelector('h3'),cards[i].querySelector('p')].forEach((el,j)=>set(el,keys[j]));
+      });
+    }
+
+    const live=document.querySelector('#livestock');
+    if(live){
+      set(live.querySelector('p'),'livestock.kicker'); set(live.querySelector('h2'),'livestock.title'); set(live.querySelector('h2 + p'),'livestock.intro');
+      const cards=live.querySelectorAll('.grid.md\\:grid-cols-3 .pillar-card');
+      [['swine.title','swine.text'],['carabao.title','carabao.text'],['registry.title','registry.text']].forEach((keys,i)=>{
+        if(cards[i]) [cards[i].querySelector('h3'),cards[i].querySelector('p')].forEach((el,j)=>set(el,keys[j]));
+      });
+      const stats=live.querySelectorAll('.grid.sm\\:grid-cols-3 p:last-child');
+      ['households','heads','both'].forEach((k,i)=>set(stats[i],k));
+      set(live.querySelector('p.font-mono.text-\\[11px\\]'),'impact.note');
+    }
+
+    const innov=document.querySelector('#innovations');
+    if(innov){
+      set(innov.querySelector('p'),'innovations.kicker'); set(innov.querySelector('h2'),'innovations.title'); set(innov.querySelector('h2 + p'),'innovations.intro');
+      const cards=innov.querySelectorAll('.grid.sm\\:grid-cols-2 > div');
+      [['drone.title','drone.text'],['solar.title','solar.text'],['blockchain.title','blockchain.text'],['voice.title','voice.text']].forEach((keys,i)=>{
+        if(cards[i]){
+          set(cards[i].querySelector('span'),'field');
+          set(cards[i].querySelector('h3'),keys[0]); set(cards[i].querySelector('p'),keys[1]);
+        }
+      });
+    }
+
+    const pitch=document.querySelector('#pitch');
+    if(pitch){
+      set(pitch.querySelector('p'),'pitch.kicker'); set(pitch.querySelector('h2'),'pitch.title'); set(pitch.querySelector('h2 + p'),'pitch.text');
+      set(pitch.querySelector('p.text-\\[\\#EAF3E1\\]\\/50'),'pitch.emailpref');
+      const labels=pitch.querySelectorAll('label');
+      ['form.name','form.email','form.idea'].forEach((k,i)=>set(labels[i],k));
+      set(pitch.querySelector('#pitch-name'),'form.nameph','placeholder');
+      set(pitch.querySelector('#pitch-email'),'form.emailph','placeholder');
+      set(pitch.querySelector('#pitch-idea'),'form.ideaph','placeholder');
+      set(pitch.querySelector('button[type=submit]'),'form.send');
+    }
+
+    const contact=document.querySelector('#contact');
+    if(contact){ set(contact.querySelector('h2'),'contact.title'); set(contact.querySelector('h2 + p'),'contact.text'); }
+
+    const footer=document.querySelector('footer');
+    if(footer) set(footer.querySelectorAll('p')[1],'footer.registered');
+
+    // Chat
+    set(document.querySelector('.chat-head strong'),'chat.title');
+    set(document.querySelector('.chat-head div div'),'chat.subtitle');
+    const chatMsgs=document.querySelectorAll('#chatBody .bot-msg');
+    set(chatMsgs[0],'chat.greeting'); set(chatMsgs[1],'chat.help');
+    set(document.querySelector('#chatInput'),'chat.placeholder','placeholder');
+    set(document.querySelector('#chatForm button'),'chat.send');
+  }
+
+  function applyLanguage(lang){
+    const dict = translations[lang] || translations.English;
+    document.documentElement.lang = lang === 'English' ? 'en' : 'fil';
+    document.querySelectorAll('[data-i18n]').forEach(el=>{
+      const key=el.dataset.i18n;
+      if(dict[key] == null) return;
+      const value=dict[key];
+      if(el.dataset.i18nAttr === 'placeholder') el.placeholder=value;
+      else el.innerHTML=value;
+    });
+
+    // Status badges inside innovation cards need separate values.
+    document.querySelectorAll('#innovations .grid.sm\\:grid-cols-2 > div span').forEach((el,i)=>{
+      el.innerHTML = i < 2 ? (dict.field || translations.English.field) : (dict.piloting || translations.English.piloting);
+    });
+
+    // Form placeholder keys were assigned as attributes.
+    localStorage.setItem('dapoLanguage', lang);
+    document.getElementById('currentLanguage').textContent = lang;
+    document.querySelectorAll('[data-lang]').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
+
+    // Keep AI chat content synchronized when switching language.
+    const msgs=document.querySelectorAll('#chatBody .bot-msg');
+    if(msgs[0] && dict['chat.greeting']) msgs[0].textContent=dict['chat.greeting'];
+    if(msgs[1] && dict['chat.help']) msgs[1].textContent=dict['chat.help'];
+  }
+
+  assignKeys();
+
+  // Robust language selector: one delegated click handler, plus saved-language restore.
+  // Using delegation prevents duplicate/competing handlers from the original selector.
+  window.dapoApplyLanguage = applyLanguage;
+
+  document.addEventListener('click', function(e){
+    const btn = e.target.closest('[data-lang]');
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    applyLanguage(btn.getAttribute('data-lang'));
+  }, true);
+
+  let saved = 'English';
+  try {
+    saved = localStorage.getItem('dapoLanguage') || 'English';
+  } catch (err) {
+    saved = 'English';
+  }
+  if (!translations[saved]) saved = 'English';
+  applyLanguage(saved);
+
+  // Update the demo chatbot reply according to the selected language.
+  const form=document.getElementById('chatForm');
+  const input=document.getElementById('chatInput');
+  const body=document.getElementById('chatBody');
+  if(form){
+    form.addEventListener('submit',function(){
+      const lang=document.getElementById('currentLanguage').textContent;
+      const dict=translations[lang] || translations.English;
+      setTimeout(()=>{
+        const bots=body.querySelectorAll('.bot-msg');
+        const last=bots[bots.length-1];
+        if(last && last.textContent.startsWith('Thanks!')) last.textContent=dict['chat.reply'];
+      },0);
+    });
+  }
+})();
+</script>
+
+
+<script>
+(function(){
+  const selector = document.getElementById('dapoLanguageSelector');
+  const toggle = document.getElementById('dapoLanguageToggle');
+  const menu = document.getElementById('dapoLanguageMenu');
+  const current = document.getElementById('currentLanguage');
+
+  if (!selector || !toggle || !menu) return;
+
+  toggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    menu.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', menu.classList.contains('open'));
+  });
+
+  document.addEventListener('click', function(e){
+    if (!selector.contains(e.target)) {
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded','false');
+    }
+  });
+
+  document.querySelectorAll('#dapoLanguageMenu [data-lang]').forEach(function(btn){
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      e.stopPropagation();
+
+      const lang = btn.getAttribute('data-lang');
+
+      // Use the multilingual engine already present in the file.
+      if (typeof window.dapoApplyLanguage === 'function') {
+        window.dapoApplyLanguage(lang);
+      } else {
+        // Fallback if the translation engine is not yet initialized.
+        try { localStorage.setItem('dapoLanguage', lang); } catch(e) {}
+        current.textContent = lang;
+      }
+
+      current.textContent = lang;
+      document.querySelectorAll('#dapoLanguageMenu [data-lang]').forEach(function(b){
+        b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+      });
+
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded','false');
+    });
+  });
+
+  // Restore saved language label and highlight.
+  let saved = 'English';
+  try { saved = localStorage.getItem('dapoLanguage') || 'English'; } catch(e) {}
+  current.textContent = saved;
+
+  document.querySelectorAll('#dapoLanguageMenu [data-lang]').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-lang') === saved);
+  });
+})();
+</script>
+
+</body>
+</html>
